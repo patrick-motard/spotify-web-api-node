@@ -40,6 +40,9 @@ module.exports = {
    *          Not returned if a callback is given.
    */
   authorizationCodeGrant: function(code, callback) {
+    console.log('this is the auth code in authorizationCodeGrant:')
+    console.log(code)
+    console.log('hello from bobs burgers!!!!!')
     return AuthenticationRequest.builder()
       .withPath('/api/token')
       .withBodyParameters({
@@ -48,6 +51,13 @@ module.exports = {
         code: code,
         client_id: this.getClientId(),
         client_secret: this.getClientSecret()
+      })
+      .withHeaders({
+        Authorization:
+          'Basic ' +
+          new Buffer(
+            this.getClientId() + ':' + this.getClientSecret()
+          ).toString('base64')
       })
       .build()
       .execute(HttpManager.post, callback);

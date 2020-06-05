@@ -77,12 +77,19 @@ HttpManager._makeRequest = function(method, options, uri, callback) {
   } else if (options.data) {
     req.send(options.data);
   }
+  // req.type('json');
 
   if (options.headers) {
     req.set(options.headers);
   }
 
+  console.log('options in _makeRequest');
+  console.log(options)
   req.end(function(err, response) {
+    console.log('ERROR!!!')
+    console.log(err)
+    console.log('RESPONSE!!!')
+    // console.log(response)
     if (err) {
       var errorObject = _getErrorObject('Request error', {
         error: err
