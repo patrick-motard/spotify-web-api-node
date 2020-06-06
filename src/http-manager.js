@@ -77,32 +77,80 @@ HttpManager._makeRequest = function(method, options, uri, callback) {
   } else if (options.data) {
     req.send(options.data);
   }
+
+  if (options.data) {
+    if (options.data.client_id && options.data.client_secret) {
+      req.set('Authorization', 'Basic ' +
+        new Buffer(
+          options.data.client_id + ':' + options.data.client_secret
+        ).toString('base64'))
+    }
+  }
   // req.type('json');
 
+      // .withHeaders({
+      //   Authorization:
+      //     'Basic ' +
+      //     new Buffer(
+      //       this.getClientId() + ':' + this.getClientSecret()
+      //     ).toString('base64')
+      // })
   if (options.headers) {
     req.set(options.headers);
+    // req.set({
+    //   Authorization:
+    //   'Basic ' +
+    //   new Buffer(
+    //     this.getClientId() + ':' + this.getClientSecret()
+    //   ).toString('base64')
+    // })
   }
+  // console.log('this is the request');
+  // console.log(req);
 
-  console.log('options in _makeRequest');
-  console.log(options)
-  req.end(function(err, response) {
-    console.log('ERROR!!!')
-    console.log(err)
-    console.log('RESPONSE!!!')
-    // console.log(response)
-    if (err) {
-      var errorObject = _getErrorObject('Request error', {
-        error: err
-      });
-      return callback(errorObject);
-    }
 
-    return callback(null, {
+  // console.log('options in _makeRequest');
+  // console.log(options)
+  req.then(response => {
+    callback(null, {
       body: response.body,
       headers: response.headers,
       statusCode: response.statusCode
     });
-  });
+
+    return {
+      body: response.body,
+      headers: response.headers,
+      statusCode: response.statusCode
+    };
+  })
+  .catch(e => {
+    console.log(e);
+    return e;
+  })
+  // req.end(function(err, response) {
+  //   if (err) {
+  //     console.log('ERROR!!!')
+  //     console.log(err.error)
+  //     console.log(response.body)
+  //   }
+  //   if (!err && response) {
+  //     console.log('RESPONSE!!!')
+  //     console.log(response.body)
+  //   }
+  //   if (err) {
+  //     var errorObject = _getErrorObject('Request error', {
+  //       error: err
+  //     });
+  //     return callback(errorObject);
+  //   }
+
+  //   return callback(null, {
+  //     body: response.body,
+  //     headers: response.headers,
+  //     statusCode: response.statusCode
+  //   });
+  // });
 };
 
 /**
