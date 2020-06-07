@@ -40,11 +40,6 @@ module.exports = {
    *          Not returned if a callback is given.
    */
   authorizationCodeGrant: function(code, callback) {
-    // console.log('this is the auth code in authorizationCodeGrant:')
-    // console.log(code)
-    // console.log(this);
-    // console.log('hello from bobs burgers!!!!!')
-
     return AuthenticationRequest.builder()
       .withPath('/api/token')
       .withBodyParameters({

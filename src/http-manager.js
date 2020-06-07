@@ -78,56 +78,43 @@ HttpManager._makeRequest = function(method, options, uri, callback) {
     req.send(options.data);
   }
 
-  if (options.data) {
-    if (options.data.client_id && options.data.client_secret) {
-      req.set('Authorization', 'Basic ' +
-        new Buffer(
-          options.data.client_id + ':' + options.data.client_secret
-        ).toString('base64'))
-    }
-  }
-  // req.type('json');
+  // TODO: Set and hand in Authorization header to _makeRequest.
+  // Don't do it in the method itself.
+  // /api/token requires client_secret and client_id to be in headers
+  // via the Authorization header.
+  // if (options.data) {
+  //   if (options.data.client_id && options.data.client_secret) {
+  //     req.set('Authorization', 'Basic ' +
+  //       new Buffer(
+  //         options.data.client_id + ':' + options.data.client_secret
+  //       ).toString('base64'))
+  //   }
+  // }
 
-      // .withHeaders({
-      //   Authorization:
-      //     'Basic ' +
-      //     new Buffer(
-      //       this.getClientId() + ':' + this.getClientSecret()
-      //     ).toString('base64')
-      // })
+  // set any additional headers passed in
   if (options.headers) {
     req.set(options.headers);
-    // req.set({
-    //   Authorization:
-    //   'Basic ' +
-    //   new Buffer(
-    //     this.getClientId() + ':' + this.getClientSecret()
-    //   ).toString('base64')
-    // })
   }
-  // console.log('this is the request');
-  // console.log(req);
+  console.log('got here yo!')
 
-
-  // console.log('options in _makeRequest');
-  // console.log(options)
   req.then(response => {
     callback(null, {
       body: response.body,
       headers: response.headers,
       statusCode: response.statusCode
     });
+    // return response
 
     return {
       body: response.body,
       headers: response.headers,
       statusCode: response.statusCode
     };
-  })
-  .catch(e => {
-    console.log(e);
-    return e;
-  })
+  });
+  // .catch(e => {
+  //   // console.log(e);
+  //   return e;
+  // })
   // req.end(function(err, response) {
   //   if (err) {
   //     console.log('ERROR!!!')
